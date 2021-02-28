@@ -1,4 +1,6 @@
-﻿using ElasticSearchChallenge.Repository.Interface;
+﻿using Dapper;
+using ElasticSearchChallenge.Common.Helper;
+using ElasticSearchChallenge.Repository.Interface;
 using ElasticSearchChallenge.Repository.Model;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,23 @@ namespace ElasticSearchChallenge.Repository.Implement
 {
     public class SqlCharacterRepository : ICharacterRepository
     {
+        private readonly IConnectionHelper _connectionHelper;
+
+        public SqlCharacterRepository(IConnectionHelper connectionHelper)
+        {
+            this._connectionHelper = connectionHelper;
+        }
+
         public async Task<IEnumerable<Character>> GetAllAsync()
         {
-            return Array.Empty<Character>();
+            var sql = @"
+                SELECT *
+                FROM Character WITH(NOLOCK)";
+
+            using (var conn = this._connectionHelper.Character)
+            {
+                return await conn.QueryAsync<Character>(sql);
+            }
         }
     }
 }
