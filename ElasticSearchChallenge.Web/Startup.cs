@@ -1,3 +1,4 @@
+using ElasticSearchChallenge.Web.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ElasticSearchChallenge.Web
@@ -23,7 +25,23 @@ namespace ElasticSearchChallenge.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var assemblies = new[]
+            {
+                 Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Web.dll"),
+                 Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Common.dll"),
+                 Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Repository.dll"),
+            };
+
+            services.Scan(scan =>
+                scan.FromAssemblies(assemblies)
+                    .AddClasses()
+                    .AsMatchingInterface()
+                    );
+
             services.AddControllersWithViews();
+
+            services.AddDependencyInjection(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

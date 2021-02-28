@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchChallenge.Web", "ElasticSearchChallenge.Web\ElasticSearchChallenge.Web.csproj", "{B70446EF-1E4B-47D5-905F-B72F6FB8E9C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CBA35194-8B81-4382-BD2C-2767610FFEAD} = {CBA35194-8B81-4382-BD2C-2767610FFEAD}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchChallenge.Repository", "ElasticSearchChallenge.Repository\ElasticSearchChallenge.Repository.csproj", "{3B388295-6BBF-436E-AD25-9615EAA9762D}"
 EndProject
