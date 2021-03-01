@@ -61,7 +61,7 @@ namespace ElasticSearchChallenge.RepositoryTests
                 }
 
                 // 檢查是否timeout
-                var waitSeconds = TimeSpan.FromSeconds(1);
+                var waitSeconds = TimeSpan.FromSeconds(5);
                 Thread.Sleep(waitSeconds);
                 timeout -= waitSeconds;
                 if (timeout.Seconds < 0)
