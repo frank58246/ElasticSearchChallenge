@@ -4,6 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ElasticSearchChallenge.RepositoryTests;
+using ElasticSearchChallenge.Common.Helper;
+using System.Threading.Tasks;
+using System.Linq;
+using NSubstitute;
+using System.Data.SqlClient;
+using FluentAssertions;
 
 namespace ElasticSearchChallenge.Repository.Implement.Tests
 {
@@ -15,6 +21,8 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         private readonly string _database;
 
         private readonly string _table;
+
+        private IConnectionHelper _connectionHelper;
 
         public SqlCharacterRepositoryTests()
         {
@@ -28,6 +36,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         public void TestInitialize()
         {
             _testRelationDatabaseHelper.CreateTable(_database, _table);
+            _testRelationDatabaseHelper.InsertData(_database, _table);
         }
 
         [TestCleanup]
@@ -36,10 +45,26 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             _testRelationDatabaseHelper.DeleteData(_database, _table);
         }
 
-        [TestMethod()]
-        public void GetAllAsyncTest()
+        private SqlCharacterRepository GetSystemUnderTest()
         {
-            Assert.IsTrue(3 > 1);
+            this._connectionHelper = Substitute.For<IConnectionHelper>();
+            var connectionString = _testRelationDatabaseHelper.GetConnectionString(_database);
+            this._connectionHelper.Character.Returns(new SqlConnection(connectionString));
+
+            return new SqlCharacterRepository(this._connectionHelper);
+        }
+
+        [TestMethod()]
+        public async Task GetAllAsyncTest()
+        {
+            // Arrange
+            var sut = this.GetSystemUnderTest();
+
+            // Act
+            var result = await sut.GetAllAsync();
+
+            // Assert
+            result.Count().Should().Be(66);
         }
     }
 }
