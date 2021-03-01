@@ -1,0 +1,33 @@
+{
+  "mappings": {
+    "properties": {
+      "age": {
+        "type": "float"
+      },
+      "birthdate": {
+        "type": "date"
+      },
+      "family": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "keyword"
+      },
+      "origin": {
+        "type": "keyword"
+      },
+      "sID": {
+        "type": "integer"
+      },
+      "sex": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}

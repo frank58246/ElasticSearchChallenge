@@ -1,5 +1,7 @@
-﻿using ElasticSearchChallenge.Repository.Interface;
+﻿using ElasticSearchChallenge.Common.Model;
+using ElasticSearchChallenge.Repository.Interface;
 using ElasticSearchChallenge.Repository.Model;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +11,23 @@ namespace ElasticSearchChallenge.Repository.Implement
 {
     public class ESCharacterRepository : ICharacterRepository
     {
+        private readonly IElasticClient _elasticClient;
+
+        public ESCharacterRepository(IElasticClient elasticClient)
+        {
+            this._elasticClient = elasticClient;
+        }
+
         public async Task<IEnumerable<Character>> GetAllAsync()
         {
-            return Array.Empty<Character>();
+            var searchRequest = new SearchRequest("character")
+            {
+                Query = new MatchAllQuery()
+            };
+
+            var response = await this._elasticClient.SearchAsync<Character>();
+
+            return response.Documents;
         }
     }
 }
