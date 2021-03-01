@@ -9,7 +9,7 @@ namespace ElasticSearchChallenge.RepositoryTests
 {
     public class TestRelationDatabaseHelper : ITestRelationDatabaseHelper
     {
-        private string GetConnectionString(string database)
+        public string GetConnectionString(string database)
         {
             var setting = TestHook.DockerSupport.TestSetting;
             var port = setting.ContainerSettings
@@ -20,32 +20,66 @@ namespace ElasticSearchChallenge.RepositoryTests
             var connString = $"Data Source=localhost,{port}; " +
                              $"Initial Catalog={database};" +
                              $"User Id=SA;Password=qazwsx123456!";
+
             return connString;
         }
 
         public void CreateDatabase(string database)
         {
-            var connectionString = GetConnectionString("master");
-            using (var conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = $"CREATE DATABASE {database}";
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            var command = $"CREATE DATABASE {database}";
+            Execute("master", command);
         }
 
         public void DeleteData(string database, string table)
         {
-            throw new NotImplementedException();
+            var command = $"DELETE {table}";
+            Execute(database, command);
         }
 
         public void InsertData(string database, string table)
         {
-            throw new NotImplementedException();
+            var baseDir = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(baseDir, "TestData", $"{table}_Insert.sql");
+            var command = File.ReadAllText(filePath);
+
+            Execute(database, command);
+        }
+
+        public void CreateTable(string database, string table)
+        {
+            var baseDir = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(baseDir, "TestData", $"{table}_Create.sql");
+            var command = File.ReadAllText(filePath);
+
+            Execute(database, command);
+        }
+
+        public void DropTable(string database, string table)
+        {
+            var command = $"DROP TABLE{table}";
+
+            Execute(database, command);
+        }
+
+        public void DropDatabase(string database)
+        {
+            var command = $"DROP DATABASE{database}";
+
+            Execute("master", command);
+        }
+
+        private void Execute(string database, string command)
+        {
+            var connectionString = GetConnectionString(database);
+            using (var conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = command;
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

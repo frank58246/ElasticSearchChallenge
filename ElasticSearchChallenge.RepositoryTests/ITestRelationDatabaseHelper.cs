@@ -8,8 +8,16 @@ namespace ElasticSearchChallenge.RepositoryTests
     {
         void CreateDatabase(string database);
 
+        void DropDatabase(string database);
+
+        void CreateTable(string database, string table);
+
+        void DropTable(string database, string table);
+
         void InsertData(string database, string table);
 
         void DeleteData(string database, string table);
+
+        string GetConnectionString(string database);
     }
 }
