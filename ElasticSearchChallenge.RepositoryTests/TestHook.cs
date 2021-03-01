@@ -8,12 +8,12 @@ namespace ElasticSearchChallenge.RepositoryTests
     [TestClass]
     public class TestHook
     {
-        private static DockerSupport dockerSupport = new DockerSupport();
+        public static DockerSupport DockerSupport = new DockerSupport();
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
-            var start = dockerSupport.StartSSMSContainer();
+            var start = DockerSupport.StartSSMSContainer();
 
             if (start.Equals(false))
             {
@@ -24,7 +24,7 @@ namespace ElasticSearchChallenge.RepositoryTests
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
-            dockerSupport.StopSSMSContainer();
+            DockerSupport.StopSSMSContainer();
         }
     }
 }
