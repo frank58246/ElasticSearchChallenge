@@ -1,0 +1,12 @@
+{
+  "ContainerSettings": [
+    {
+      "ContainerName": "SSMS_UnitTest",
+      "OutterPort": 45678,
+      "InnerPort": 1433,
+      "ImageName": "mcr.microsoft.com/mssql/server",
+      "Argument": "-e SA_PASSWORD=qazwsx123456! -e ACCEPT_EULA=y",
+      "ReadyMessage": "The default language (LCID 0) has been set for engine and full-text services."
+    }
+  ]
+}

@@ -13,18 +13,18 @@ namespace ElasticSearchChallenge.RepositoryTests
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
-            var start = DockerSupport.StartSSMSContainer();
+            // 啟動前先停止container
+            // 避免上一次執行的container沒有被正常關閉
+            // 導致啟動失敗
 
-            if (start.Equals(false))
-            {
-                throw new InvalidOperationException("start container fail");
-            }
+            DockerSupport.StopContainer();
+            DockerSupport.StartContainer();
         }
 
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
-            DockerSupport.StopSSMSContainer();
+            DockerSupport.StopContainer();
         }
     }
 }

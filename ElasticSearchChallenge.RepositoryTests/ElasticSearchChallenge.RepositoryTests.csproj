@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,9 +9,13 @@
   <ItemGroup>
     <None Remove="TestData\character_Create.sql" />
     <None Remove="TestData\character_Insert.sql" />
+    <None Remove="TestSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Setting\TestSetting.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\character_Create.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,7 +1,10 @@
 ﻿using CliWrap;
 using CliWrap.Buffered;
+using ElasticSearchChallenge.RepositoryTests.Setting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -9,76 +12,79 @@ namespace ElasticSearchChallenge.RepositoryTests
 {
     public class DockerSupport
     {
-        private string _containerName = "SSMS_Unit_Test";
+        private readonly TestSetting _testSetting;
 
-        private string _imageName = "mcr.microsoft.com/mssql/server";
+        public TestSetting TestSetting => _testSetting;
 
-        private int _port = 0;
-
-        public int Port
+        public DockerSupport()
         {
-            get
+            var baseDir = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(baseDir, "Setting", "TestSetting.json");
+
+            using (var r = new StreamReader(filePath))
             {
-                if (_port == 0)
-                {
-                    _port = new Random().Next(44567, 56418);
-                }
-                return _port;
+                string json = r.ReadToEnd();
+                this._testSetting = JsonConvert.DeserializeObject<TestSetting>(json);
             }
         }
 
-        // 啟動ssms contaier
-        public bool StartSSMSContainer()
+        public bool StartContainer()
         {
+            var containerSettings = this._testSetting.ContainerSettings;
+
             // 啟動container
-            var startCommand = $"run -d --rm=true --name {_containerName} -p {Port}:1433  -e SA_PASSWORD=qazwsx123456! -e ACCEPT_EULA=y mcr.microsoft.com/mssql/server";
-            Cli.Wrap("docker")
-                      .WithArguments(startCommand)
-                      .ExecuteAsync()
-                      .GetAwaiter()
-                      .GetResult();
-
-            // 檢查ssms是否啟動完成
-            var logs = Cli.Wrap("docker")
-                      .WithArguments($"logs {_containerName}")
-                      .ExecuteBufferedAsync()
-                      .GetAwaiter()
-                      .GetResult();
-
-            var timeout = TimeSpan.FromSeconds(30);
-            var readyMessage = "The default language (LCID 0) has been set for engine and full-text services.";
-            while (logs.StandardOutput.Contains(readyMessage).Equals(false))
+            foreach (var containerSetting in containerSettings)
             {
-                if (logs.StandardError != string.Empty)
+                Cli.Wrap("docker")
+                     .WithArguments(containerSetting.RunCommand)
+                     .ExecuteAsync()
+                     .GetAwaiter()
+                     .GetResult();
+            }
+
+            // 檢查服務是否啟用完成
+            var isReady = false;
+            var timeout = TimeSpan.FromSeconds(30);
+
+            while (isReady.Equals(false))
+            {
+                isReady = true;
+                foreach (var containerSetting in containerSettings)
                 {
-                    throw new InvalidOperationException(logs.StandardError);
+                    var logs = Cli.Wrap("docker")
+                    .WithArguments($"logs {containerSetting.ContainerName}")
+                    .ExecuteBufferedAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                    isReady &= logs.StandardOutput.Contains(containerSetting.ReadyMessage);
                 }
 
+                // 檢查是否timeout
+                var waitSeconds = TimeSpan.FromSeconds(3);
+                Thread.Sleep(waitSeconds);
+                timeout -= waitSeconds;
                 if (timeout.Seconds < 0)
                 {
-                    throw new TimeoutException("start ssms container timeout");
+                    throw new TimeoutException();
                 }
-
-                var waitSecond = TimeSpan.FromSeconds(3);
-                Thread.Sleep(waitSecond);
-                timeout -= waitSecond;
-
-                logs = Cli.Wrap("docker")
-                   .WithArguments($"logs {_containerName}")
-                   .ExecuteBufferedAsync()
-                   .GetAwaiter()
-                   .GetResult();
             }
+
             return true;
         }
 
-        public void StopSSMSContainer()
+        public void StopContainer()
         {
-            Cli.Wrap("docker")
-               .WithArguments($"stop {_containerName} ")
-               .ExecuteAsync()
-               .GetAwaiter()
-               .GetResult();
+            var containerSettings = this._testSetting.ContainerSettings;
+            foreach (var containerSetting in containerSettings)
+            {
+                Cli.Wrap("docker")
+                    .WithArguments($"stop {containerSetting.ContainerName}")
+                    .WithValidation(CommandResultValidation.None)
+                    .ExecuteAsync()
+                    .GetAwaiter()
+                    .GetResult();
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ElasticSearchChallenge.RepositoryTests
@@ -10,7 +11,12 @@ namespace ElasticSearchChallenge.RepositoryTests
     {
         private string GetConnectionString(string database)
         {
-            var port = TestHook.DockerSupport.Port;
+            var setting = TestHook.DockerSupport.TestSetting;
+            var port = setting.ContainerSettings
+                              .Where(x => x.ImageName.Contains("mssql"))
+                              .FirstOrDefault()
+                              .OutterPort;
+
             var connString = $"Data Source=localhost,{port}; " +
                              $"Initial Catalog={database};" +
                              $"User Id=SA;Password=qazwsx123456!";
