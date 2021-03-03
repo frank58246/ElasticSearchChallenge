@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="TestData\character_Create.json" />
     <None Remove="TestData\character_Create.sql" />
+    <None Remove="TestData\character_Insert.json" />
     <None Remove="TestData\character_Insert.sql" />
     <None Remove="TestSettings.json" />
   </ItemGroup>
@@ -21,6 +22,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\character_Create.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\character_Insert.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\character_Insert.sql">

@@ -22,6 +22,7 @@ namespace ElasticSearchChallenge.Repository.Implement
         {
             var searchRequest = new SearchRequest("character")
             {
+                Size = 100,
                 Query = new MatchAllQuery()
             };
 

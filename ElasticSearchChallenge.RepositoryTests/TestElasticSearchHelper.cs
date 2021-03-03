@@ -1,9 +1,12 @@
 ﻿using CliWrap;
+using CliWrap.Buffered;
 using Nest;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace ElasticSearchChallenge.RepositoryTests
@@ -12,8 +15,11 @@ namespace ElasticSearchChallenge.RepositoryTests
     {
         private readonly string _elasticUrl;
 
+        private readonly HttpClient _httpClient;
+
         public TestElasticSearchHelper()
         {
+            this._httpClient = new HttpClient();
             var setting = TestHook.DockerSupport.TestSetting;
             var port = setting.ContainerSettings
                               .Where(x => x.ImageName.Contains("elasticsearch"))
@@ -35,7 +41,7 @@ namespace ElasticSearchChallenge.RepositoryTests
             this.Exexcute(method, body, url);
         }
 
-        public void DeleteData(string index, string indice)
+        public void DeleteData(string index)
         {
             throw new NotImplementedException();
         }
@@ -54,22 +60,42 @@ namespace ElasticSearchChallenge.RepositoryTests
             return new ElasticClient(settings);
         }
 
-        public void InsertData(string index, string indice)
+        public void InsertData(string index)
         {
-            throw new NotImplementedException();
+            var url = $"{_elasticUrl}/{index}/_bulk?refresh=true";
+            var method = "PUT";
+
+            var baseDir = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(baseDir, "TestData", $"{index}_Insert.json");
+            var body = File.ReadAllText(filePath);
+
+            Exexcute(method, body, url);
         }
 
         private void Exexcute(string method, string body, string url)
         {
-            var argument = $"-X {method} " +
-                           $"-H \"Content-Type:application/json\" " +
-                           $"-d '{body}' \"{url}\"";
+            HttpResponseMessage response;
+            var contentPost = new StringContent(body, Encoding.UTF8, "application/json");
 
-            Cli.Wrap("curl")
-               .WithArguments(argument)
-               .ExecuteAsync()
-               .GetAwaiter()
-               .GetResult();
+            switch (method)
+            {
+                case "PUT":
+                    response = _httpClient.PutAsync(url, contentPost).GetAwaiter().GetResult();
+
+                    break;
+
+                case "POST":
+                    response = _httpClient.PostAsync(url, contentPost).GetAwaiter().GetResult();
+                    break;
+
+                default:
+                    throw new NotImplementedException(nameof(method));
+            }
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var message = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                throw new InvalidOperationException(message);
+            }
         }
     }
 }

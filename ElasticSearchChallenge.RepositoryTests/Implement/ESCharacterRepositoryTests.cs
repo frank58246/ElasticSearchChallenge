@@ -8,6 +8,7 @@ using Nest;
 using System.Threading.Tasks;
 using System.Linq;
 using FluentAssertions;
+using System.IO;
 
 namespace ElasticSearchChallenge.Repository.Implement.Tests
 {
@@ -28,12 +29,23 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             _testElasticSearchHelper.CreateIndex(_index);
         }
 
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _testElasticSearchHelper.InsertData(_index);
+        }
+
+        [TestCleanup]
+        public void TestCleanUp()
+        {
+        }
+
         private ESCharacterRepository GetSystemUnderTest()
         {
             return new ESCharacterRepository(this._elasticClient);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task GetAllAsyncTest()
         {
             // Arrange

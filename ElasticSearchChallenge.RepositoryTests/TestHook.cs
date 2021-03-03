@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace ElasticSearchChallenge.RepositoryTests
@@ -16,7 +17,9 @@ namespace ElasticSearchChallenge.RepositoryTests
             // 啟動前先停止container
             // 避免上一次執行的container沒有被正常關閉
             // 導致啟動失敗
-
+            var file = $"D:/{DateTime.Now:MMdd}.txt";
+            var log = $"{DateTime.Now} AssemblyInitialize start";
+            File.WriteAllText(file, log);
             DockerSupport.StopContainer();
             DockerSupport.StartContainer();
         }
@@ -24,7 +27,7 @@ namespace ElasticSearchChallenge.RepositoryTests
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
-            DockerSupport.StopContainer();
+            //DockerSupport.StopContainer();
         }
     }
 }
