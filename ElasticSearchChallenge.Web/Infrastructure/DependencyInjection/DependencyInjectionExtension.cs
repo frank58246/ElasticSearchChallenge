@@ -2,6 +2,7 @@
 using ElasticSearchChallenge.Common.Setting;
 using ElasticSearchChallenge.Repository.Implement;
 using ElasticSearchChallenge.Repository.Interface;
+using ElasticSearchChallenge.Repository.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -46,8 +47,14 @@ namespace ElasticSearchChallenge.Web.Infrastructure.DependencyInjection
             var databaseHelper = services.BuildServiceProvider()
                                          .GetService<IDatabaseHelper>();
 
-            var node = new Uri(databaseHelper.ElasticSearch);
-            var elasticSearchClient = new ElasticClient(node);
+            var uri = new Uri(databaseHelper.ElasticSearch);
+            var settings = new ConnectionSettings(uri)
+                .DefaultIndex("defaultindex")
+                            .DefaultMappingFor<Character>(m => m
+                                .IndexName("character"));
+
+            var elasticSearchClient = new ElasticClient(settings);
+
             services.AddSingleton<IElasticClient>(elasticSearchClient);
         }
     }

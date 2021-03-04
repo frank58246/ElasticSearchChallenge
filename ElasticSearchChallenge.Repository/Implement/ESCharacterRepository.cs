@@ -26,7 +26,7 @@ namespace ElasticSearchChallenge.Repository.Implement
                 Query = new MatchAllQuery()
             };
 
-            var response = await this._elasticClient.SearchAsync<Character>();
+            var response = await this._elasticClient.SearchAsync<Character>(searchRequest);
 
             return response.Documents;
         }

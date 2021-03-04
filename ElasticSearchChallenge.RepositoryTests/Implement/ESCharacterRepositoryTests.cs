@@ -26,7 +26,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             _testElasticSearchHelper = new TestElasticSearchHelper();
             _elasticClient = _testElasticSearchHelper.GetElasticClient();
             _index = "character";
-            _testElasticSearchHelper.CreateIndex(_index);
+            //_testElasticSearchHelper.CreateIndex(_index);
         }
 
         [TestInitialize]
@@ -55,7 +55,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var actual = await sut.GetAllAsync();
 
             // Assert
-            actual.Count().Should().Be(0);
+            actual.Count().Should().Be(66);
         }
     }
 }

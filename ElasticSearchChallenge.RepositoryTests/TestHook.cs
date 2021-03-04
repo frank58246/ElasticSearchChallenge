@@ -17,9 +17,6 @@ namespace ElasticSearchChallenge.RepositoryTests
             // 啟動前先停止container
             // 避免上一次執行的container沒有被正常關閉
             // 導致啟動失敗
-            var file = $"D:/{DateTime.Now:MMdd}.txt";
-            var log = $"{DateTime.Now} AssemblyInitialize start";
-            File.WriteAllText(file, log);
             DockerSupport.StopContainer();
             DockerSupport.StartContainer();
         }

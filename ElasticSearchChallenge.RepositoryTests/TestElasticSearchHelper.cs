@@ -1,5 +1,6 @@
 ﻿using CliWrap;
 using CliWrap.Buffered;
+using ElasticSearchChallenge.Repository.Model;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 
 namespace ElasticSearchChallenge.RepositoryTests
 {
@@ -55,7 +57,10 @@ namespace ElasticSearchChallenge.RepositoryTests
         {
             var node = new Uri(this._elasticUrl);
             var settings = new ConnectionSettings(node)
-                                .DefaultIndex("defalt_index");
+                                .DefaultIndex("defalt_index")
+                                .DisableDirectStreaming(false)
+                                .DefaultMappingFor<Character>(m => m
+                                .IndexName("character"));
 
             return new ElasticClient(settings);
         }

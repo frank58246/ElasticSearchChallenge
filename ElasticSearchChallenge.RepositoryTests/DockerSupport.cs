@@ -30,7 +30,6 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         public bool StartContainer()
         {
-            var file = $"D:/{DateTime.Now:MMdd}.txt";
             var containerSettings = this._testSetting.ContainerSettings;
 
             // 啟動container
@@ -42,8 +41,6 @@ namespace ElasticSearchChallenge.RepositoryTests
                      .GetAwaiter()
                      .GetResult();
             }
-            var log = $"{DateTime.Now} conatainer Started";
-            File.AppendAllText(file, log);
 
             // 檢查服務是否啟用完成
             var isReady = false;
@@ -61,8 +58,6 @@ namespace ElasticSearchChallenge.RepositoryTests
                     .GetResult();
 
                     var serviceReady = logs.StandardOutput.Contains(containerSetting.ReadyMessage);
-                    log = $"{DateTime.Now} {containerSetting.ContainerName} ready: {serviceReady} ";
-                    File.AppendAllText(file, log + Environment.NewLine);
                     isReady &= serviceReady;
                 }
 
@@ -81,10 +76,6 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         public void StopContainer()
         {
-            var file = $"{DateTime.Now:MMdd}.txt";
-            var log = $"{DateTime.Now} start to  StopContainer";
-            File.AppendAllText(file, log + Environment.NewLine);
-
             var containerSettings = this._testSetting.ContainerSettings;
             foreach (var containerSetting in containerSettings)
             {
