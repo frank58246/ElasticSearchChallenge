@@ -26,7 +26,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
 
         public ESCharacterRepositoryTests()
         {
-            _testElasticSearchHelper = new TestElasticSearchHelper();
+            _testElasticSearchHelper = TestHook.GetTestElasticSearchHelper();
             _elasticClient = _testElasticSearchHelper.GetElasticClient();
             _index = "character";
             _testElasticSearchHelper.CreateIndex(_index);
@@ -46,10 +46,6 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         private ESCharacterRepository GetSystemUnderTest()
         {
             return new ESCharacterRepository(this._elasticClient);
-        }
-
-        private SqlCharacterRepository GetSqlCharacterRepository()
-        {
         }
 
         [TestMethod]

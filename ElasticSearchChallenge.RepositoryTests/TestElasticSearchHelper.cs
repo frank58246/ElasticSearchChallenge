@@ -19,16 +19,10 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         private readonly HttpClient _httpClient;
 
-        public TestElasticSearchHelper()
+        public TestElasticSearchHelper(HttpClient httpClient, int port)
         {
-            this._httpClient = new HttpClient();
-            var setting = TestHook.DockerSupport.TestSetting;
-            var port = setting.ContainerSettings
-                              .Where(x => x.ImageName.Contains("elasticsearch"))
-                              .FirstOrDefault()
-                              .OutterPort;
-
-            _elasticUrl = $"http://localhost:{port}";
+            this._httpClient = httpClient;
+            this._elasticUrl = $"http://localhost:{port}";
         }
 
         public void CreateIndex(string index)

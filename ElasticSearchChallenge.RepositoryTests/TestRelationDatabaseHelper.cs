@@ -9,15 +9,16 @@ namespace ElasticSearchChallenge.RepositoryTests
 {
     public class TestRelationDatabaseHelper : ITestRelationDatabaseHelper
     {
+        private readonly int _port;
+
+        public TestRelationDatabaseHelper(int port)
+        {
+            this._port = port;
+        }
+
         public string GetConnectionString(string database)
         {
-            var setting = TestHook.DockerSupport.TestSetting;
-            var port = setting.ContainerSettings
-                              .Where(x => x.ImageName.Contains("mssql"))
-                              .FirstOrDefault()
-                              .OutterPort;
-
-            var connString = $"Data Source=localhost,{port}; " +
+            var connString = $"Data Source=localhost,{_port}; " +
                              $"Initial Catalog={database};" +
                              $"User Id=SA;Password=qazwsx123456!";
 

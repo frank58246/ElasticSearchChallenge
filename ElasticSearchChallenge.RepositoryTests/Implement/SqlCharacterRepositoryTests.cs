@@ -26,7 +26,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
 
         public SqlCharacterRepositoryTests()
         {
-            _testRelationDatabaseHelper = new TestRelationDatabaseHelper();
+            _testRelationDatabaseHelper = TestHook.GetTestRelationDatabaseHelper();
             _database = "character";
             _table = "character";
             _testRelationDatabaseHelper.CreateDatabase(this._database);
