@@ -12,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchChallenge.Repo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchChallenge.Common", "ElasticSearchChallenge.Common\ElasticSearchChallenge.Common.csproj", "{CBA35194-8B81-4382-BD2C-2767610FFEAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchChallenge.RepositoryTests", "ElasticSearchChallenge.RepositoryTests\ElasticSearchChallenge.RepositoryTests.csproj", "{267026ED-F849-4B5A-83FC-CB36163CAD58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchChallenge.RepositoryTests", "ElasticSearchChallenge.RepositoryTests\ElasticSearchChallenge.RepositoryTests.csproj", "{267026ED-F849-4B5A-83FC-CB36163CAD58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchChallenge.Service", "ElasticSearchChallenge.Service\ElasticSearchChallenge.Service.csproj", "{D6332318-7F1E-42FC-B4CC-9565B23EEAB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{267026ED-F849-4B5A-83FC-CB36163CAD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{267026ED-F849-4B5A-83FC-CB36163CAD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{267026ED-F849-4B5A-83FC-CB36163CAD58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6332318-7F1E-42FC-B4CC-9565B23EEAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6332318-7F1E-42FC-B4CC-9565B23EEAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6332318-7F1E-42FC-B4CC-9565B23EEAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6332318-7F1E-42FC-B4CC-9565B23EEAB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

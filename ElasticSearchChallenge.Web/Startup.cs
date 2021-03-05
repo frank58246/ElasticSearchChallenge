@@ -30,6 +30,7 @@ namespace ElasticSearchChallenge.Web
             {
                  Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Web.dll"),
                  Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Common.dll"),
+                 Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Service.dll"),
                  Assembly.LoadFrom($"{baseDirectory}ElasticSearchChallenge.Repository.dll"),
             };
 
