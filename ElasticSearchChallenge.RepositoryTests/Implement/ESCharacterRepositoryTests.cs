@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using FluentAssertions;
 using System.IO;
+using ElasticSearchChallenge.Common.Helper;
 
 namespace ElasticSearchChallenge.Repository.Implement.Tests
 {
@@ -19,6 +20,8 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
 
         private readonly IElasticClient _elasticClient;
 
+        private readonly IDatabaseHelper _databaseHelper;
+
         private readonly string _index;
 
         public ESCharacterRepositoryTests()
@@ -26,7 +29,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             _testElasticSearchHelper = new TestElasticSearchHelper();
             _elasticClient = _testElasticSearchHelper.GetElasticClient();
             _index = "character";
-            //_testElasticSearchHelper.CreateIndex(_index);
+            _testElasticSearchHelper.CreateIndex(_index);
         }
 
         [TestInitialize]
@@ -43,6 +46,10 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         private ESCharacterRepository GetSystemUnderTest()
         {
             return new ESCharacterRepository(this._elasticClient);
+        }
+
+        private SqlCharacterRepository GetSqlCharacterRepository()
+        {
         }
 
         [TestMethod]

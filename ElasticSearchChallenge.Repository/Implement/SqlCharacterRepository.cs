@@ -29,5 +29,19 @@ namespace ElasticSearchChallenge.Repository.Implement
                 return await conn.QueryAsync<Character>(sql);
             }
         }
+
+        public async Task<IEnumerable<Character>> GetByFamily(string family)
+        {
+            var sql = @"
+                SELECT *
+                FROM Character WITH(NOLOCK)
+                WHERE Family = @Family";
+
+            using (var conn = this._connectionHelper.Character)
+            {
+                var parameter = new { Family = family };
+                return await conn.QueryAsync<Character>(sql, parameter);
+            }
+        }
     }
 }

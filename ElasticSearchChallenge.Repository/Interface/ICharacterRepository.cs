@@ -9,5 +9,7 @@ namespace ElasticSearchChallenge.Repository.Interface
     public interface ICharacterRepository
     {
         Task<IEnumerable<Character>> GetAllAsync();
+
+        Task<IEnumerable<Character>> GetByFamily(string family);
     }
 }

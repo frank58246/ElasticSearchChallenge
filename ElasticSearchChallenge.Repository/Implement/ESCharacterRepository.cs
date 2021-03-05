@@ -30,5 +30,22 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             return response.Documents;
         }
+
+        public async Task<IEnumerable<Character>> GetByFamily(string family)
+        {
+            var searchRequest = new SearchRequest("character")
+            {
+                Size = 100,
+                Query = new TermQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Family),
+                    Value = family
+                }
+            };
+
+            var response = await this._elasticClient.SearchAsync<Character>(searchRequest);
+
+            return response.Documents;
+        }
     }
 }

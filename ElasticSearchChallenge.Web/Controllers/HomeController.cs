@@ -31,8 +31,8 @@ namespace ElasticSearchChallenge.Web.Controllers
 
         public IActionResult Index()
         {
-            var a = _sqlCharacterRepository.GetAllAsync().GetAwaiter().GetResult();
-            var b = _esCharacterRepository.GetAllAsync().GetAwaiter().GetResult();
+            var a = _sqlCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
+            var b = _esCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
             return View();
         }
 
