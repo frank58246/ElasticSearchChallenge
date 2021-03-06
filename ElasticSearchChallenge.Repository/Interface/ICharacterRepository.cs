@@ -11,5 +11,7 @@ namespace ElasticSearchChallenge.Repository.Interface
         Task<IEnumerable<Character>> GetAllAsync();
 
         Task<IEnumerable<Character>> GetByFamily(string family);
+
+        Task<IEnumerable<Character>> SearchAsync(CharacterSearchParameter parameter);
     }
 }

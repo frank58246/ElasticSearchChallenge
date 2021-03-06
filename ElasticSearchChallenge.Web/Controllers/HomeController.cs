@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ElasticSearchChallenge.Repository.Implement;
 using ElasticSearchChallenge.Service.Interface;
 using Newtonsoft.Json;
+using ElasticSearchChallenge.Repository.Model;
 
 namespace ElasticSearchChallenge.Web.Controllers
 {
@@ -39,7 +40,7 @@ namespace ElasticSearchChallenge.Web.Controllers
             var a = _sqlCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
             var b = _esCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
             var compare = this._characterService.CompareAsync().GetAwaiter().GetResult();
-            var json = JsonConvert.SerializeObject(compare);
+
             return View();
         }
 

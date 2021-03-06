@@ -10,6 +10,7 @@ using System.Linq;
 using NSubstitute;
 using System.Data.SqlClient;
 using FluentAssertions;
+using ElasticSearchChallenge.Repository.Model;
 
 namespace ElasticSearchChallenge.Repository.Implement.Tests
 {
@@ -65,6 +66,24 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
 
             // Assert
             result.Count().Should().Be(66);
+        }
+
+        [TestMethod()]
+        public async Task SearchAsyncTest_無產階級_找出所有丐幫的角色()
+        {
+            // Arrange
+            var parameter = new CharacterSearchParameter()
+            {
+                Family = new List<string>() { "丐幫" }
+            };
+
+            var sut = this.GetSystemUnderTest();
+
+            // Act
+            var result = await sut.SearchAsync(parameter);
+
+            // Assert
+            result.All(x => x.Family == "丐幫");
         }
     }
 }

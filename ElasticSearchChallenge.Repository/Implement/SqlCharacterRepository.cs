@@ -4,6 +4,7 @@ using ElasticSearchChallenge.Repository.Interface;
 using ElasticSearchChallenge.Repository.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +42,27 @@ namespace ElasticSearchChallenge.Repository.Implement
             {
                 var parameter = new { Family = family };
                 return await conn.QueryAsync<Character>(sql, parameter);
+            }
+        }
+
+        public async Task<IEnumerable<Character>> SearchAsync(CharacterSearchParameter parameter)
+        {
+            var sql = @"
+                SELECT *
+                FROM Character WITH(NOLOCK)
+                WHERE 1= 1 ";
+
+            var dynamicParametert = new DynamicParameters();
+
+            if (parameter.Family.Count() > 0)
+            {
+                sql += "AND Family in @Family";
+                dynamicParametert.Add("@Family", parameter.Family);
+            }
+
+            using (var conn = this._connectionHelper.Character)
+            {
+                return await conn.QueryAsync<Character>(sql, dynamicParametert);
             }
         }
     }

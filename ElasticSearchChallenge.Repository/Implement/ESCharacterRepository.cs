@@ -47,5 +47,10 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             return response.Documents;
         }
+
+        public async Task<IEnumerable<Character>> SearchAsync(CharacterSearchParameter parameter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
