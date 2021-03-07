@@ -6,9 +6,13 @@ namespace ElasticSearchChallenge.RepositoryTests
 {
     public interface ITestRelationDatabaseHelper
     {
+        bool ExistDatabase(string database);
+
         void CreateDatabase(string database);
 
         void DropDatabase(string database);
+
+        bool ExistTable(string database, string table);
 
         void CreateTable(string database, string table);
 

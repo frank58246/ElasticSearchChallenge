@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -27,7 +28,13 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         public void CreateDatabase(string database)
         {
+            if (this.ExistDatabase(database))
+            {
+                return;
+            }
+
             var command = $"CREATE DATABASE {database}";
+
             Execute("master", command);
         }
 
@@ -48,6 +55,11 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         public void CreateTable(string database, string table)
         {
+            if (ExistTable(database, table))
+            {
+                return;
+            }
+
             var baseDir = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(baseDir, "TestData", $"{table}_Create.sql");
             var command = File.ReadAllText(filePath);
@@ -80,6 +92,35 @@ namespace ElasticSearchChallenge.RepositoryTests
                     cmd.CommandText = command;
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        public bool ExistDatabase(string database)
+        {
+            var sql = $"select DB_ID('{database}')";
+            var connectionString = GetConnectionString("master");
+            using (var conn = new SqlConnection(connectionString))
+            {
+                var result = conn.QueryFirstOrDefault<bool?>(sql);
+                return result != null;
+            }
+        }
+
+        public bool ExistTable(string database, string table)
+        {
+            var sql = @"IF EXISTS (SELECT 1
+                                   FROM INFORMATION_SCHEMA.TABLES
+                                   WHERE TABLE_TYPE='BASE TABLE'
+                                   AND TABLE_NAME=@TableName)
+
+                        SELECT 1 AS res ELSE SELECT 0 ";
+
+            var parameter = new { TableName = table };
+
+            var connectionString = GetConnectionString(database);
+            using (var conn = new SqlConnection(connectionString))
+            {
+                return conn.QueryFirstOrDefault<bool>(sql, parameter);
             }
         }
     }

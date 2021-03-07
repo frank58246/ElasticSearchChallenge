@@ -20,8 +20,6 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
 
         private readonly IElasticClient _elasticClient;
 
-        private readonly IDatabaseHelper _databaseHelper;
-
         private readonly string _index;
 
         public ESCharacterRepositoryTests()

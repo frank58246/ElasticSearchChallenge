@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using ElasticSearchChallenge.Common.Extension;
 using ElasticSearchChallenge.Common.Helper;
 using ElasticSearchChallenge.Repository.Interface;
 using ElasticSearchChallenge.Repository.Model;
@@ -54,10 +55,28 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             var dynamicParametert = new DynamicParameters();
 
-            if (parameter.Family.Count() > 0)
+            if (parameter.Family.HasValue())
             {
-                sql += "AND Family in @Family";
+                sql += "AND Family IN @Family";
                 dynamicParametert.Add("@Family", parameter.Family);
+            }
+
+            if (parameter.Origin.HasValue())
+            {
+                sql += "AND Origin IN @Origin";
+                dynamicParametert.Add("@Origin", parameter.Origin);
+            }
+
+            if (parameter.UpAge > 0)
+            {
+                sql += "AND Age < @Age";
+                dynamicParametert.Add("@Age", parameter.UpAge);
+            }
+
+            if (parameter.DownAge > 0)
+            {
+                sql += "AND Age > @Age";
+                dynamicParametert.Add("@Age", parameter.DownAge);
             }
 
             using (var conn = this._connectionHelper.Character)
