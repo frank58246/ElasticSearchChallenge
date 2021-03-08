@@ -1,4 +1,5 @@
-﻿using ElasticSearchChallenge.Common.Model;
+﻿using ElasticSearchChallenge.Common.Extension;
+using ElasticSearchChallenge.Common.Model;
 using ElasticSearchChallenge.Repository.Interface;
 using ElasticSearchChallenge.Repository.Model;
 using Nest;
@@ -50,7 +51,61 @@ namespace ElasticSearchChallenge.Repository.Implement
 
         public async Task<IEnumerable<Character>> SearchAsync(CharacterSearchParameter parameter)
         {
-            throw new NotImplementedException();
+            var mustClauses = new List<QueryContainer>();
+
+            if (parameter.Name.HasValue())
+            {
+                mustClauses.Add(new TermQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Name),
+                    Value = parameter.Name
+                });
+            }
+
+            if (parameter.Family.HasValue())
+            {
+                mustClauses.Add(new TermQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Family),
+                    Value = parameter.Family
+                });
+            }
+
+            if (parameter.Origin.HasValue())
+            {
+                mustClauses.Add(new TermQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Origin),
+                    Value = parameter.Origin
+                });
+            }
+
+            if (parameter.UpAge > 0)
+            {
+                mustClauses.Add(new NumericRangeQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Age),
+                    LessThanOrEqualTo = parameter.UpAge
+                });
+            }
+
+            if (parameter.DownAge > 0)
+            {
+                mustClauses.Add(new NumericRangeQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Age),
+                    GreaterThanOrEqualTo = parameter.DownAge
+                });
+            }
+
+            var searchRequest = new SearchRequest("character")
+            {
+                Size = 100,
+                Query = new BoolQuery { Must = mustClauses }
+            };
+            var response = await this._elasticClient.SearchAsync<Character>(searchRequest);
+
+            return response.Documents;
         }
     }
 }

@@ -18,8 +18,8 @@ namespace ElasticSearchChallenge.Repository.Model
 
         public float DownAge { get; set; }
 
-        public DateTime UpBirthdate { get; set; }
+        public DateTime? UpBirthdate { get; set; }
 
-        public DateTime DownBirthdate { get; set; }
+        public DateTime? DownBirthdate { get; set; }
     }
 }

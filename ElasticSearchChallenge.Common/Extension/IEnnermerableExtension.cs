@@ -9,7 +9,7 @@ namespace ElasticSearchChallenge.Common.Extension
     {
         public static bool HasValue<T>(this IEnumerable<T> source)
         {
-            if (source != null)
+            if (source == null)
             {
                 return false;
             }

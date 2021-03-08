@@ -57,26 +57,50 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             if (parameter.Family.HasValue())
             {
-                sql += "AND Family IN @Family";
+                sql += "AND Family IN @Family ";
                 dynamicParametert.Add("@Family", parameter.Family);
+            }
+
+            if (parameter.Name.HasValue())
+            {
+                sql += "AND Name IN @Name";
+                dynamicParametert.Add("@Name", parameter.Name);
             }
 
             if (parameter.Origin.HasValue())
             {
-                sql += "AND Origin IN @Origin";
+                sql += "AND Origin IN @Origin ";
                 dynamicParametert.Add("@Origin", parameter.Origin);
+            }
+
+            if (parameter.UpBirthdate != null)
+            {
+                sql += "AND Birthdate < @UpBirthdate ";
+                dynamicParametert.Add("@UpBirthdate", parameter.UpBirthdate);
+            }
+
+            if (parameter.DownBirthdate != null)
+            {
+                sql += "AND Birthdate > @DownBirthdate";
+                dynamicParametert.Add("@DownBirthdate", parameter.DownBirthdate);
             }
 
             if (parameter.UpAge > 0)
             {
-                sql += "AND Age < @Age";
+                sql += "AND Age < @Age ";
                 dynamicParametert.Add("@Age", parameter.UpAge);
             }
 
             if (parameter.DownAge > 0)
             {
-                sql += "AND Age > @Age";
+                sql += "AND Age > @Age ";
                 dynamicParametert.Add("@Age", parameter.DownAge);
+            }
+
+            if (parameter.Sex.HasValue())
+            {
+                sql += "AND Sex = @Sex ";
+                dynamicParametert.Add("@Sex", parameter.Sex);
             }
 
             using (var conn = this._connectionHelper.Character)

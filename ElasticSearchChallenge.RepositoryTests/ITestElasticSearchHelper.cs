@@ -11,6 +11,8 @@ namespace ElasticSearchChallenge.RepositoryTests
 
         void CreateIndex(string index);
 
+        bool ExistIndex(string index);
+
         void InsertData(string index);
 
         void DeleteData(string index);
