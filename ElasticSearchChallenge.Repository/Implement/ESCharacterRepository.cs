@@ -57,7 +57,7 @@ namespace ElasticSearchChallenge.Repository.Implement
             {
                 mustClauses.Add(new TermsQuery
                 {
-                    Field = Infer.Field<Character>(c => c.Name),
+                    Field = Infer.Field<Character>(c => c.Name.Suffix("keyword")),
                     Terms = parameter.Name
                 });
             }

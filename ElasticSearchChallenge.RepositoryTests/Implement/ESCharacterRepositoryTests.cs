@@ -104,7 +104,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             // Arrange
             var parameter = new CharacterSearchParameter()
             {
-                Sex = "m", //這邊給大寫會錯，很奇怪...
+                Sex = "M",
                 UpAge = 30.0f
             };
 

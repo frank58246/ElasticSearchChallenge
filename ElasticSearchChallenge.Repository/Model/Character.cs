@@ -9,7 +9,6 @@ namespace ElasticSearchChallenge.Repository.Model
     {
         public int SID { get; set; }
 
-        [Keyword(Name = "name")]
         public string Name { get; set; }
 
         [Keyword(Name = "sex")]

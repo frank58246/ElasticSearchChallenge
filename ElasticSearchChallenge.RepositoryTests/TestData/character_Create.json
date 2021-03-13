@@ -11,7 +11,13 @@
         "type": "keyword"
       },
       "name": {
-        "type": "keyword"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
       },
       "origin": {
         "type": "keyword"
@@ -20,13 +26,7 @@
         "type": "integer"
       },
       "sex": {
-        "type": "text",
-        "fields": {
-          "keyword": {
-            "type": "keyword",
-            "ignore_above": 256
-          }
-        }
+        "type": "keyword"
       }
     }
   }
