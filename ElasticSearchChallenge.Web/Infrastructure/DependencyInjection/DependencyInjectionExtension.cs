@@ -49,7 +49,7 @@ namespace ElasticSearchChallenge.Web.Infrastructure.DependencyInjection
 
             var uri = new Uri(databaseHelper.ElasticSearch);
             var settings = new ConnectionSettings(uri)
-                .DefaultIndex("defaultindex")
+                .DefaultIndex("defaul_tindex")
                             .DefaultMappingFor<Character>(m => m
                                 .IndexName("character"));
 

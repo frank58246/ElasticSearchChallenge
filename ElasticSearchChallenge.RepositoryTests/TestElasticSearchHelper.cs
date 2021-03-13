@@ -80,7 +80,6 @@ namespace ElasticSearchChallenge.RepositoryTests
             var node = new Uri(this._elasticUrl);
             var settings = new ConnectionSettings(node)
                                 .DefaultIndex("defalt_index")
-                                .DisableDirectStreaming(false)
                                 .DefaultMappingFor<Character>(m => m
                                 .IndexName("character"));
 

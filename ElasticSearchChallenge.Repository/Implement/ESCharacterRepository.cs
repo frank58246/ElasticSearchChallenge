@@ -55,28 +55,28 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             if (parameter.Name.HasValue())
             {
-                mustClauses.Add(new TermQuery
+                mustClauses.Add(new TermsQuery
                 {
                     Field = Infer.Field<Character>(c => c.Name),
-                    Value = parameter.Name
+                    Terms = parameter.Name
                 });
             }
 
             if (parameter.Family.HasValue())
             {
-                mustClauses.Add(new TermQuery
+                mustClauses.Add(new TermsQuery
                 {
                     Field = Infer.Field<Character>(c => c.Family),
-                    Value = parameter.Family
+                    Terms = parameter.Family
                 });
             }
 
             if (parameter.Origin.HasValue())
             {
-                mustClauses.Add(new TermQuery
+                mustClauses.Add(new TermsQuery
                 {
                     Field = Infer.Field<Character>(c => c.Origin),
-                    Value = parameter.Origin
+                    Terms = parameter.Origin
                 });
             }
 
@@ -95,6 +95,33 @@ namespace ElasticSearchChallenge.Repository.Implement
                 {
                     Field = Infer.Field<Character>(c => c.Age),
                     GreaterThanOrEqualTo = parameter.DownAge
+                });
+            }
+
+            if (parameter.UpBirthdate != null)
+            {
+                mustClauses.Add(new DateRangeQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Birthdate),
+                    LessThanOrEqualTo = parameter.UpBirthdate
+                });
+            }
+
+            if (parameter.DownBirthdate != null)
+            {
+                mustClauses.Add(new DateRangeQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Birthdate),
+                    GreaterThanOrEqualTo = parameter.DownBirthdate
+                });
+            }
+
+            if (parameter.Sex.HasValue())
+            {
+                mustClauses.Add(new TermQuery()
+                {
+                    Field = Infer.Field<Character>(c => c.Sex),
+                    Value = parameter.Sex
                 });
             }
 

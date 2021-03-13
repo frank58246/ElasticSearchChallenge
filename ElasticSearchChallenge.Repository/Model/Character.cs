@@ -9,9 +9,10 @@ namespace ElasticSearchChallenge.Repository.Model
     {
         public int SID { get; set; }
 
-        [Keyword]
+        [Keyword(Name = "name")]
         public string Name { get; set; }
 
+        [Keyword(Name = "sex")]
         public string Sex { get; set; }
 
         [Keyword]
