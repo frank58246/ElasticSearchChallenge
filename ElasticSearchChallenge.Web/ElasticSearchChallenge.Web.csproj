@@ -12,6 +12,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ElasticSearchChallenge.Common\ElasticSearchChallenge.Common.csproj" />
     <ProjectReference Include="..\ElasticSearchChallenge.Repository\ElasticSearchChallenge.Repository.csproj" />
-    <ProjectReference Include="..\ElasticSearchChallenge.Service\ElasticSearchChallenge.Service.csproj" />
   </ItemGroup>
 </Project>

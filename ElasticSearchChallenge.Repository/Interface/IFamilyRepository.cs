@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace ElasticSearchChallenge.Repository.Interface
 {
-    public interface ICharacterRepository
+    public interface IFamilyRepository
     {
-        Task<IEnumerable<Character>> GetAllAsync();
-
-        Task<IEnumerable<Character>> SearchAsync(CharacterSearchParameter parameter);
+        Task<IEnumerable<string>> SearchAsync(FamilySearchParameter parameter);
     }
 }

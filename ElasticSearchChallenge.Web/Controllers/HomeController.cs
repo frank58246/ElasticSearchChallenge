@@ -9,8 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ElasticSearchChallenge.Repository.Implement;
-using ElasticSearchChallenge.Service.Interface;
-using Newtonsoft.Json;
 using ElasticSearchChallenge.Repository.Model;
 
 namespace ElasticSearchChallenge.Web.Controllers
@@ -21,8 +19,6 @@ namespace ElasticSearchChallenge.Web.Controllers
 
         private readonly ICharacterRepository _esCharacterRepository;
 
-        private readonly ICharacterService _characterService;
-
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(IServiceProvider serviceProvider, ILogger<HomeController> logger)
@@ -31,16 +27,11 @@ namespace ElasticSearchChallenge.Web.Controllers
 
             _sqlCharacterRepository = services.First(o => o.GetType() == typeof(SqlCharacterRepository));
             _esCharacterRepository = services.First(o => o.GetType() == typeof(ESCharacterRepository));
-            _characterService = serviceProvider.GetServices<ICharacterService>().FirstOrDefault();
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var a = _sqlCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
-            var b = _esCharacterRepository.GetByFamily("華山派").GetAwaiter().GetResult();
-            var compare = this._characterService.CompareAsync().GetAwaiter().GetResult();
-
             return View();
         }
 
