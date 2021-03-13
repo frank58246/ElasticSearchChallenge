@@ -26,5 +26,7 @@ namespace ElasticSearchChallenge.RepositoryTests.Setting
          $"--name {ContainerName} -p {OutterPort}:{InnerPort} {ImageName}";
 
         public string ReadyMessage { get; set; }
+
+        public bool KeepRunning { get; set; }
     }
 }

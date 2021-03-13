@@ -6,7 +6,8 @@
       "InnerPort": 1433,
       "ImageName": "mcr.microsoft.com/mssql/server",
       "Argument": "-e SA_PASSWORD=qazwsx123456! -e ACCEPT_EULA=y",
-      "ReadyMessage": "The default language (LCID 0) has been set for engine and full-text services."
+      "ReadyMessage": "The default language (LCID 0) has been set for engine and full-text services.",
+      "KeepRunning": true
     },
     {
       "ContainerName": "ElasticSearch_UnitTest",
@@ -14,7 +15,8 @@
       "InnerPort": 9200,
       "ImageName": "docker.elastic.co/elasticsearch/elasticsearch:7.10.2",
       "Argument": "-e \"discovery.type=single-node\"  -e \"ES_JAVA_OPTS=-Xms512m -Xmx512m\" ",
-      "ReadyMessage": "started"
+      "ReadyMessage": "started",
+      "KeepRunning": true
     }
   ]
 }

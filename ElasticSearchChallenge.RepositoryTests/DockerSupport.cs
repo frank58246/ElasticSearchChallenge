@@ -35,6 +35,11 @@ namespace ElasticSearchChallenge.RepositoryTests
             // 啟動container
             foreach (var containerSetting in containerSettings)
             {
+                if (IsContainerRunning(containerSetting.ContainerName))
+                {
+                    continue;
+                }
+
                 Cli.Wrap("docker")
                      .WithArguments(containerSetting.RunCommand)
                      .ExecuteAsync()
@@ -79,6 +84,11 @@ namespace ElasticSearchChallenge.RepositoryTests
             var containerSettings = this._testSetting.ContainerSettings;
             foreach (var containerSetting in containerSettings)
             {
+                if (containerSetting.KeepRunning.Equals(true))
+                {
+                    continue;
+                }
+
                 Cli.Wrap("docker")
                     .WithArguments($"stop {containerSetting.ContainerName}")
                     .WithValidation(CommandResultValidation.None)
@@ -86,6 +96,17 @@ namespace ElasticSearchChallenge.RepositoryTests
                     .GetAwaiter()
                     .GetResult();
             }
+        }
+
+        private bool IsContainerRunning(string containerName)
+        {
+            var runningList = Cli.Wrap("docker")
+                    .WithArguments($"ps")
+                    .ExecuteBufferedAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+            return runningList.StandardOutput.Contains(containerName);
         }
     }
 }
