@@ -44,8 +44,8 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             if (parameter.Factions.HasValue())
             {
-                sql += "AND Faction IN @Faction ";
-                dynamicParametert.Add("@Faction", parameter.Factions);
+                sql += "AND Faction IN @Factions ";
+                dynamicParametert.Add("@Factions", parameter.Factions);
             }
 
             if (parameter.Names.HasValue())
@@ -54,6 +54,10 @@ namespace ElasticSearchChallenge.Repository.Implement
                 dynamicParametert.Add("@Name", parameter.Names);
             }
 
+            if (parameter.LastName.HasValue())
+            {
+                sql += $"AND Name LIKE N'{parameter.LastName}%' ";
+            }
             if (parameter.Novels.HasValue())
             {
                 sql += "AND Novel IN @Novels ";
@@ -62,14 +66,26 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             if (parameter.UpBirthday != null)
             {
-                sql += "AND Birthdate < @UpBirthdate ";
-                dynamicParametert.Add("@UpBirthdate", parameter.UpBirthday);
+                // 參數若小於1753年，必須指定型別為Datetime2
+                sql += "AND Birthday < @UpBirthday  ";
+                dynamicParametert.Add
+                (
+                     name: "@UpBirthday",
+                     parameter.UpBirthday,
+                     dbType: System.Data.DbType.DateTime2
+                );
             }
 
             if (parameter.DownBirthday != null)
             {
-                sql += "AND Birthdate > @DownBirthdate";
-                dynamicParametert.Add("@DownBirthdate", parameter.DownBirthday);
+                // 參數若小於1753年，必須指定型別為Datetime2
+                sql += "AND Birthday > @DownBirthday ";
+                dynamicParametert.Add
+                (
+                     name: "@DownBirthday",
+                     parameter.DownBirthday,
+                     dbType: System.Data.DbType.DateTime2
+                );
             }
 
             if (parameter.UpAge > 0)
@@ -88,6 +104,28 @@ namespace ElasticSearchChallenge.Repository.Implement
             {
                 sql += "AND Sex = @Sex ";
                 dynamicParametert.Add("@Sex", parameter.Sex);
+            }
+            if (parameter.Targets.HasValue())
+            {
+                int index = 0;
+                var conditonList = new List<string>();
+                foreach (var target in parameter.Targets)
+                {
+                    // 轉為 (Novel= @Novel0 AND Faction = @Faction0)
+
+                    var condition = $"(Novel = @Novel{index} AND " +
+                                    $" Faction = @Faction{index} )";
+                    conditonList.Add(condition);
+
+                    dynamicParametert.Add($"@Novel{index}", target.Novel);
+                    dynamicParametert.Add($"@Faction{index}", target.Faction);
+                    index += 1;
+                }
+
+                // 加上 AND (condtion1 OR condtion2 Or condtion3 ... )
+
+                var targetClause = string.Join("OR", conditonList);
+                sql += $"AND ({targetClause}) ";
             }
 
             using (var conn = this._connectionHelper.Character)
