@@ -42,34 +42,34 @@ namespace ElasticSearchChallenge.Repository.Implement
 
             var dynamicParametert = new DynamicParameters();
 
-            if (parameter.Family.HasValue())
+            if (parameter.Factions.HasValue())
             {
-                sql += "AND Family IN @Family ";
-                dynamicParametert.Add("@Family", parameter.Family);
+                sql += "AND Faction IN @Faction ";
+                dynamicParametert.Add("@Faction", parameter.Factions);
             }
 
-            if (parameter.Name.HasValue())
+            if (parameter.Names.HasValue())
             {
                 sql += "AND Name IN @Name";
-                dynamicParametert.Add("@Name", parameter.Name);
+                dynamicParametert.Add("@Name", parameter.Names);
             }
 
-            if (parameter.Origin.HasValue())
+            if (parameter.Novels.HasValue())
             {
-                sql += "AND Origin IN @Origin ";
-                dynamicParametert.Add("@Origin", parameter.Origin);
+                sql += "AND Novel IN @Novels ";
+                dynamicParametert.Add("@Novels", parameter.Novels);
             }
 
-            if (parameter.UpBirthdate != null)
+            if (parameter.UpBirthday != null)
             {
                 sql += "AND Birthdate < @UpBirthdate ";
-                dynamicParametert.Add("@UpBirthdate", parameter.UpBirthdate);
+                dynamicParametert.Add("@UpBirthdate", parameter.UpBirthday);
             }
 
-            if (parameter.DownBirthdate != null)
+            if (parameter.DownBirthday != null)
             {
                 sql += "AND Birthdate > @DownBirthdate";
-                dynamicParametert.Add("@DownBirthdate", parameter.DownBirthdate);
+                dynamicParametert.Add("@DownBirthdate", parameter.DownBirthday);
             }
 
             if (parameter.UpAge > 0)

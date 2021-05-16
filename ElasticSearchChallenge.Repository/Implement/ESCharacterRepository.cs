@@ -36,30 +36,45 @@ namespace ElasticSearchChallenge.Repository.Implement
         {
             var mustClauses = new List<QueryContainer>();
 
-            if (parameter.Name.HasValue())
+            var shouldCluause = new List<QueryContainer>();
+
+            if (parameter.Names.HasValue())
             {
                 mustClauses.Add(new TermsQuery
                 {
                     Field = Infer.Field<Character>(c => c.Name.Suffix("keyword")),
-                    Terms = parameter.Name
+                    Terms = parameter.Names
                 });
             }
 
-            if (parameter.Family.HasValue())
+            if (parameter.LastName.HasValue())
+            {
+                mustClauses.Add(new MatchPhrasePrefixQuery
+                {
+                    Field = Infer.Field<Character>(c => c.Name),
+                    Query = parameter.LastName
+                });
+            }
+            if (parameter.Factions.HasValue())
             {
                 mustClauses.Add(new TermsQuery
                 {
-                    Field = Infer.Field<Character>(c => c.Family),
-                    Terms = parameter.Family
+                    // IsVerbatim預設為false，在轉換為查詢的json時，
+                    // 會忽略沒有用的條件，例如包含空字串的陣列
+                    // 導致查詢錯誤
+
+                    IsVerbatim = true,
+                    Field = Infer.Field<Character>(c => c.Faction),
+                    Terms = parameter.Factions
                 });
             }
 
-            if (parameter.Origin.HasValue())
+            if (parameter.Novels.HasValue())
             {
                 mustClauses.Add(new TermsQuery
                 {
-                    Field = Infer.Field<Character>(c => c.Origin),
-                    Terms = parameter.Origin
+                    Field = Infer.Field<Character>(c => c.Novel),
+                    Terms = parameter.Novels
                 });
             }
 
@@ -80,22 +95,21 @@ namespace ElasticSearchChallenge.Repository.Implement
                     GreaterThanOrEqualTo = parameter.DownAge
                 });
             }
-
-            if (parameter.UpBirthdate != null)
+            if (parameter.UpBirthday != null)
             {
                 mustClauses.Add(new DateRangeQuery
                 {
-                    Field = Infer.Field<Character>(c => c.Birthdate),
-                    LessThanOrEqualTo = parameter.UpBirthdate
+                    Field = Infer.Field<Character>(c => c.Birthday),
+                    LessThanOrEqualTo = parameter.UpBirthday
                 });
             }
 
-            if (parameter.DownBirthdate != null)
+            if (parameter.DownBirthday != null)
             {
                 mustClauses.Add(new DateRangeQuery
                 {
-                    Field = Infer.Field<Character>(c => c.Birthdate),
-                    GreaterThanOrEqualTo = parameter.DownBirthdate
+                    Field = Infer.Field<Character>(c => c.Birthday),
+                    GreaterThanOrEqualTo = parameter.DownBirthday
                 });
             }
 
@@ -108,10 +122,33 @@ namespace ElasticSearchChallenge.Repository.Implement
                 });
             }
 
+            if (parameter.Targets.HasValue())
+            {
+                foreach (var target in parameter.Targets)
+                {
+                    var novelQuery = new TermQuery()
+                    {
+                        Field = Infer.Field<Character>(c => c.Novel),
+                        Value = target.Novel
+                    };
+
+                    var factionQuery = new TermQuery()
+                    {
+                        Field = Infer.Field<Character>(c => c.Faction),
+                        Value = target.Faction
+                    };
+
+                    shouldCluause.Add(novelQuery && factionQuery);
+                }
+            }
             var searchRequest = new SearchRequest("character")
             {
                 Size = 100,
-                Query = new BoolQuery { Must = mustClauses }
+                Query = new BoolQuery
+                {
+                    Must = mustClauses,
+                    Should = shouldCluause
+                },
             };
             var response = await this._elasticClient.SearchAsync<Character>(searchRequest);
 

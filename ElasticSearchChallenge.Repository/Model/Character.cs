@@ -15,12 +15,12 @@ namespace ElasticSearchChallenge.Repository.Model
         public string Sex { get; set; }
 
         [Keyword]
-        public string Family { get; set; }
+        public string Faction { get; set; }
 
-        public DateTime Birthdate { get; set; }
+        public DateTime Birthday { get; set; }
 
         [Keyword]
-        public string Origin { get; set; }
+        public string Novel { get; set; }
 
         public float Age { get; set; }
     }

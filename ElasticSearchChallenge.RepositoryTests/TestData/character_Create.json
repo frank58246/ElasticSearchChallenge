@@ -4,10 +4,10 @@
       "age": {
         "type": "float"
       },
-      "birthdate": {
+      "birthday": {
         "type": "date"
       },
-      "family": {
+      "faction": {
         "type": "keyword"
       },
       "name": {
@@ -19,7 +19,7 @@
           }
         }
       },
-      "origin": {
+      "novel": {
         "type": "keyword"
       },
       "sID": {

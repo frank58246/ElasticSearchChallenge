@@ -76,7 +76,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             // Arrange
             var parameter = new CharacterSearchParameter()
             {
-                Family = new List<string>() { "丐幫" }
+                Factions = new List<string>() { "丐幫" }
             };
 
             var sut = this.GetSystemUnderTest();
@@ -85,7 +85,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var result = await sut.SearchAsync(parameter);
 
             // Assert
-            result.Should().OnlyContain(x => x.Family == "丐幫");
+            result.Should().OnlyContain(x => x.Faction == "丐幫");
         }
 
         [TestMethod()]
@@ -94,7 +94,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             // Arrange
             var parameter = new CharacterSearchParameter()
             {
-                Origin = new List<string>() { "笑傲江湖" }
+                Novels = new List<string>() { "笑傲江湖" }
             };
 
             var sut = this.GetSystemUnderTest();
@@ -103,7 +103,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var result = await sut.SearchAsync(parameter);
 
             // Assert
-            result.Should().OnlyContain(x => x.Origin == "笑傲江湖");
+            result.Should().OnlyContain(x => x.Novel == "笑傲江湖");
         }
 
         [TestMethod()]
@@ -131,7 +131,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             // Arrange
             var parameter = new CharacterSearchParameter()
             {
-                Family = new List<string>() { string.Empty }
+                Factions = new List<string>() { string.Empty }
             };
 
             var sut = this.GetSystemUnderTest();
@@ -140,7 +140,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var result = await sut.SearchAsync(parameter);
 
             // Assert
-            result.Should().OnlyContain(x => x.Family == string.Empty);
+            result.Should().OnlyContain(x => x.Faction == string.Empty);
         }
 
         [TestMethod()]
@@ -149,7 +149,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             // Arrange
             var parameter = new CharacterSearchParameter()
             {
-                Family = new List<string>() { "峨嵋派" },
+                Factions = new List<string>() { "峨嵋派" },
                 DownAge = 50
             };
 
@@ -159,7 +159,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var result = await sut.SearchAsync(parameter);
 
             // Assert
-            result.Should().OnlyContain(x => x.Family == "峨嵋派" && x.Age > 50);
+            result.Should().OnlyContain(x => x.Faction == "峨嵋派" && x.Age > 50);
         }
 
         [TestMethod()]
@@ -171,8 +171,8 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var end = new DateTime(1279, 3, 19);
             var parameter = new CharacterSearchParameter()
             {
-                UpBirthdate = end,
-                DownBirthdate = start,
+                UpBirthday = end,
+                DownBirthday = start,
             };
 
             var sut = this.GetSystemUnderTest();
@@ -181,7 +181,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var result = await sut.SearchAsync(parameter);
 
             // Assert
-            result.Should().OnlyContain(x => x.Birthdate > start && x.Birthdate < end);
+            result.Should().OnlyContain(x => x.Birthday > start && x.Birthday < end);
         }
 
         [TestMethod()]
@@ -191,7 +191,7 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
             var nameList = new List<string>() { "郭靖", "黃蓉", "楊過" };
             var parameter = new CharacterSearchParameter()
             {
-                Name = nameList
+                Names = nameList
             };
 
             var sut = this.GetSystemUnderTest();
