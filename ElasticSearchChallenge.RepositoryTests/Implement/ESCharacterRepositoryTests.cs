@@ -118,7 +118,6 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         }
 
         [Ignore()]
-        [TestMethod()]
         public async Task SearchAsyncTest_中間選民_找出所有沒有門派的腳色()
         {
             // Arrange

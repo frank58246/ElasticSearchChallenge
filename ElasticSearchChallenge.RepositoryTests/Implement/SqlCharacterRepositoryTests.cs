@@ -163,7 +163,6 @@ namespace ElasticSearchChallenge.Repository.Implement.Tests
         }
 
         [TestMethod()]
-        [Ignore()]
         public async Task SearchAsyncTest_大宋子民_找出所有宋代出生的角色()
         {
             // Arrange
